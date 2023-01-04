@@ -1,6 +1,11 @@
 import Image from 'next/image'
 import { useKeenSlider } from 'keen-slider/react'
-import { HomeContainer, Product } from '../styles/pages/home'
+import {
+  AddToCartButton,
+  HomeContainer,
+  Product,
+  TextContainer,
+} from '../styles/pages/home'
 
 import 'keen-slider/keen-slider.min.css'
 import { stripe } from '../lib/stripe'
@@ -8,6 +13,7 @@ import { GetStaticProps } from 'next'
 import Stripe from 'stripe'
 import Link from 'next/link'
 import Head from 'next/head'
+import { Handbag } from 'phosphor-react'
 
 type HomeProps = {
   products: {
@@ -23,9 +29,26 @@ export default function Home({ products }: HomeProps) {
   // assim como se fosse um document.getElementById eu tenho a referência
   // para um elemento da DOM
   const [sliderRef] = useKeenSlider({
-    slides: {
-      perView: 3,
-      spacing: 48,
+    loop: true,
+    breakpoints: {
+      '(min-width: 576px)': {
+        slides: {
+          perView: 1,
+          spacing: 10,
+        },
+      },
+      '(min-width: 800px)': {
+        slides: {
+          perView: 2,
+          spacing: 48,
+        },
+      },
+      '(min-width: 1050px)': {
+        slides: {
+          perView: 3,
+          spacing: 48,
+        },
+      },
     },
   })
 
@@ -44,11 +67,16 @@ export default function Home({ products }: HomeProps) {
               prefetch={false}
             >
               <Product className="keen-slider__slide">
-                <Image src={product.imageUrl} width={520} height={480} alt="" />
+                <Image src={product.imageUrl} width={600} height={450} alt="" />
 
                 <footer>
-                  <strong>{product.name}</strong>
-                  <span>{product.price}</span>
+                  <TextContainer>
+                    <strong>{product.name}</strong>
+                    <span>{product.price}</span>
+                  </TextContainer>
+                  <AddToCartButton>
+                    <Handbag size={32} weight="bold" />
+                  </AddToCartButton>
                 </footer>
               </Product>
             </Link>

@@ -4,8 +4,13 @@ export const Container = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  justifyContent: 'center',
+  justifyContent: 'flex-start',
   minHeight: '100vh',
+  gap: '0.5rem',
+
+  '@media (min-width: 768px)': {
+    gap: '2rem',
+  },
 })
 
 export const Header = styled('header', {
