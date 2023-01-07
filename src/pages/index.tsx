@@ -16,6 +16,7 @@ import Head from 'next/head'
 import { Handbag } from 'phosphor-react'
 import { useContext } from 'react'
 import { CartContext } from '../contexts/CartContext'
+import { useRouter } from 'next/router'
 
 type HomeProps = {
   products: {
@@ -24,7 +25,17 @@ type HomeProps = {
     name: string
     imageUrl: string
     price: string
+    priceWithoutFormatting: number
   }[]
+}
+
+export type CartItems = {
+  id: string
+  imageUrl: string
+  name: string
+  price: string
+  priceId: string
+  priceWithoutFormatting: number
 }
 
 export default function Home({ products }: HomeProps) {
@@ -57,10 +68,14 @@ export default function Home({ products }: HomeProps) {
     },
   })
 
-  function handleAddItemToCart(product: any) {
+  function handleAddItemToCart(product: CartItems) {
     addItemsToCart(product)
-    //   console.log(cartItems)
-    console.log('producrs app', product)
+  }
+
+  const { isFallback } = useRouter()
+
+  if (isFallback) {
+    return <p>Is Loading...</p>
   }
 
   return (
@@ -82,6 +97,7 @@ export default function Home({ products }: HomeProps) {
                   <strong>{product.name}</strong>
                   <span>{product.price}</span>
                 </TextContainer>
+
                 <AddToCartButton onClick={() => handleAddItemToCart(product)}>
                   <Handbag size={32} weight="bold" />
                 </AddToCartButton>
@@ -110,16 +126,11 @@ export const getStaticProps: GetStaticProps = async () => {
     expand: ['data.default_price'],
   })
 
-  //   console.log('stripe products', response.data)
-
   // fazendo uma transformação de dados, basicamente pegando apenas os dados necessários
   const products = response.data.map((product) => {
-    console.log('product', product.default_price)
-
     // preciso fazer isso para indetificar que expandimos o price
     // basicamente estou "forçando" falando que isso sempre é um Stripe.price
     const price = product.default_price as Stripe.Price
-    // console.log(product.images[0])
 
     return {
       id: product.id,
@@ -131,11 +142,11 @@ export const getStaticProps: GetStaticProps = async () => {
       // podemos inserir a formatação do preço aqui dentro, porém, caso fosse a formatação de uma
       // data por exemplo, isso não ia dar certo, pois uma data muda a cada segundo/hora/minuto
       // e essa página muda a cada 2 horas
-
       price: new Intl.NumberFormat('pt-BR', {
         style: 'currency',
         currency: 'BRL',
       }).format(price.unit_amount! / 100),
+      priceWithoutFormatting: Number(price.unit_amount_decimal),
     }
   })
 

@@ -13,26 +13,19 @@ type ProductId = {
   id: string
 }
 
-export type CartItems = CartItemsWithoutId & {
-  id: string
-  priceId: string
-  name: string
+export type CartItems = ProductId & {
   imageUrl: string
-}
-
-type ProductValues = {
-  id: string
-  priceId: string
   name: string
-  imageUrl: string
   price: string
+  priceId: string
+  priceWithoutFormatting: number
 }
 
 type CartContextValues = {
   cartItems: CartItems[]
   cartItemsWithoutId: CartItemsWithoutId[]
   productId: ProductId[]
-  addItemsToCart: (product: ProductValues) => void
+  addItemsToCart: (product: CartItems) => void
 }
 
 export const CartContext = createContext({} as CartContextValues)
@@ -40,13 +33,9 @@ export const CartContext = createContext({} as CartContextValues)
 export const CartContextProvider = ({ children }: CartContextProviderProps) => {
   const [cartItems, setCartItems] = useState<CartItems[]>([])
 
-  function addItemsToCart(product: any) {
+  function addItemsToCart(product: CartItems) {
     setCartItems([...cartItems, product])
-
-    console.log('aiaiaiaiaia', cartItems)
   }
-
-  console.log('cartItems', cartItems)
 
   const cartItemsWithoutId = cartItems.map((cartItem: CartItems) => {
     return {
@@ -60,20 +49,6 @@ export const CartContextProvider = ({ children }: CartContextProviderProps) => {
       id: cartItem.id,
     }
   })
-
-  console.log(productId)
-
-  //   async function fetchItemsFromStripe() {
-  //     const product = await stripe.products.retrieve(productId, {
-  //       // passamos o preço direto já que ele não é uma lista
-  //       expand: ['default_price'],
-  //     })
-  //     setLegal(product)
-
-  //     console.log(products)
-  //   }
-
-  console.log('Items no carrinho', cartItems)
 
   return (
     <CartContext.Provider

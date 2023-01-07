@@ -9,11 +9,7 @@ export default async function handler(
 ) {
   // id do preço relacionado ao produto
   // pegamos priceId do corpo da requisição, o que foi passado na rota product/id.tsx
-  //   const { priceId } = req.body
-  const { productId } = req.body
   const { lineItems } = req.body
-
-  console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', productId)
 
   // divergência de métodos HTTP, caso o usuário acesse a rota com outro método
   if (req.method !== 'POST') {
@@ -21,15 +17,9 @@ export default async function handler(
   }
 
   // inserindo erros
-  //   if (!priceId) {
-  //     return res.status(404).json({ error: 'Price not found' })
-  //   }
-
-  //   const idk = [
-  //     { price: priceId, quantity: 1 },
-  //     { price: priceId, quantity: 1 },
-  //     { price: priceId, quantity: 1 },
-  //   ]
+  if (!lineItems) {
+    return res.status(404).json({ error: 'Price not found' })
+  }
 
   const successUrl = `${process.env.NEXT_URL}/success?session_id={CHECKOUT_SESSION_ID}`
   const cancelUrl = `${process.env.NEXT_URL}/`
@@ -48,8 +38,6 @@ export default async function handler(
   //     // passamos o preço direto já que ele não é uma lista
   //     expand: ['default_price'],
   //   })
-
-  //   console.log('checkout session', priceId)
 
   return res.status(201).json({
     checkoutUrl: checkoutSession.url,

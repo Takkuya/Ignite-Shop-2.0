@@ -1,9 +1,8 @@
 import type { AppProps } from 'next/app'
 import { globalStyles } from '../styles/global'
 import logoImg from '../assets/Logo.svg'
-import { CartButton, Container, Header } from '../styles/pages/app'
+import { Container, Header } from '../styles/pages/app'
 import Link from 'next/link'
-import { Handbag } from 'phosphor-react'
 import 'react-modern-drawer/dist/index.css'
 import { useState } from 'react'
 import { CustomDrawer } from '../components/Drawer'
@@ -26,14 +25,11 @@ export default function App({ Component, pageProps }: AppProps) {
           <Link href="/">
             <img src={logoImg.src} alt="" />
           </Link>
-
-          <CartButton onClick={handleDrawer}>
-            <span>5</span>
-            <Handbag size={24} weight="bold" />
-          </CartButton>
+          <CustomDrawer
+            isDrawerOpen={isDrawerOpen}
+            handleDrawer={handleDrawer}
+          />
         </Header>
-
-        <CustomDrawer isDrawerOpen={isDrawerOpen} handleDrawer={handleDrawer} />
 
         <Component {...pageProps} />
       </CartContextProvider>
