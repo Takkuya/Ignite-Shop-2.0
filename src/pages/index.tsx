@@ -14,10 +14,13 @@ import Stripe from 'stripe'
 import Link from 'next/link'
 import Head from 'next/head'
 import { Handbag } from 'phosphor-react'
+import { useContext } from 'react'
+import { CartContext } from '../contexts/CartContext'
 
 type HomeProps = {
   products: {
     id: string
+    priceId: string
     name: string
     imageUrl: string
     price: string
@@ -25,6 +28,8 @@ type HomeProps = {
 }
 
 export default function Home({ products }: HomeProps) {
+  const { addItemsToCart } = useContext(CartContext)
+
   // refs => serve para termos a referência de um elemento na DOM
   // assim como se fosse um document.getElementById eu tenho a referência
   // para um elemento da DOM
@@ -52,6 +57,12 @@ export default function Home({ products }: HomeProps) {
     },
   })
 
+  function handleAddItemToCart(product: any) {
+    addItemsToCart(product)
+    //   console.log(cartItems)
+    console.log('producrs app', product)
+  }
+
   return (
     <>
       {/* tudo colocado nesse Head vai refletir no Head do document */}
@@ -61,25 +72,21 @@ export default function Home({ products }: HomeProps) {
       <HomeContainer ref={sliderRef} className="keen-slider">
         {products.map((product) => {
           return (
-            <Link
-              href={`/product/${product.id}`}
-              key={product.id}
-              prefetch={false}
-            >
-              <Product className="keen-slider__slide">
+            <Product key={product.id} className="keen-slider__slide">
+              <Link href={`/product/${product.id}`} prefetch={false}>
                 <Image src={product.imageUrl} width={600} height={450} alt="" />
+              </Link>
 
-                <footer>
-                  <TextContainer>
-                    <strong>{product.name}</strong>
-                    <span>{product.price}</span>
-                  </TextContainer>
-                  <AddToCartButton>
-                    <Handbag size={32} weight="bold" />
-                  </AddToCartButton>
-                </footer>
-              </Product>
-            </Link>
+              <footer>
+                <TextContainer>
+                  <strong>{product.name}</strong>
+                  <span>{product.price}</span>
+                </TextContainer>
+                <AddToCartButton onClick={() => handleAddItemToCart(product)}>
+                  <Handbag size={32} weight="bold" />
+                </AddToCartButton>
+              </footer>
+            </Product>
           )
         })}
       </HomeContainer>
@@ -103,15 +110,20 @@ export const getStaticProps: GetStaticProps = async () => {
     expand: ['data.default_price'],
   })
 
+  //   console.log('stripe products', response.data)
+
   // fazendo uma transformação de dados, basicamente pegando apenas os dados necessários
   const products = response.data.map((product) => {
+    console.log('product', product.default_price)
+
     // preciso fazer isso para indetificar que expandimos o price
     // basicamente estou "forçando" falando que isso sempre é um Stripe.price
     const price = product.default_price as Stripe.Price
-    console.log(product.images[0])
+    // console.log(product.images[0])
 
     return {
       id: product.id,
+      priceId: price.id,
       name: product.name,
       imageUrl: product.images[0],
       // dessa forma o intellisense funciona normalmente

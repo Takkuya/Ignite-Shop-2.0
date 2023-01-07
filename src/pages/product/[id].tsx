@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import axios from 'axios'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import Head from 'next/head'
@@ -24,29 +25,29 @@ type ProductProps = {
 }
 
 export default function Product({ product }: ProductProps) {
-  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
-    useState(false)
+  //   const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
+  //     useState(false)
 
-  async function handleBuyProduct() {
-    try {
-      setIsCreatingCheckoutSession(true)
-      // conectando com a API do next (api/checkout.ts)
-      const response = await axios.post('/api/checkout', {
-        priceId: product.defaultPriceId,
-      })
+  //   async function handleBuyProduct() {
+  //     try {
+  //       setIsCreatingCheckoutSession(true)
+  //       // conectando com a API do next (api/checkout.ts)
+  //       const response = await axios.post('/api/checkout', {
+  //         priceId: product.defaultPriceId,
+  //       })
 
-      const { checkoutUrl } = response.data
+  //       const { checkoutUrl } = response.data
 
-      // redirecionando para uma aplicação externa (nesse caso o Stripe)
-      // não coloco o setIsCreatingCheckoutSession para false pois estamos redirecionando o usuário no final da execução
-      window.location.href = checkoutUrl
-    } catch (err) {
-      setIsCreatingCheckoutSession(false)
-      // o melhor seria conectar a alguma ferramenta de observabilidade (datadog/sentry)
-      // para conseguirmos obter as informações dos erros
-      alert('Falha ao redirecionar ao checkout')
-    }
-  }
+  //       // redirecionando para uma aplicação externa (nesse caso o Stripe)
+  //       // não coloco o setIsCreatingCheckoutSession para false pois estamos redirecionando o usuário no final da execução
+  //       window.location.href = checkoutUrl
+  //     } catch (err) {
+  //       setIsCreatingCheckoutSession(false)
+  //       // o melhor seria conectar a alguma ferramenta de observabilidade (datadog/sentry)
+  //       // para conseguirmos obter as informações dos erros
+  //       alert('Falha ao redirecionar ao checkout')
+  //     }
+  //   }
 
   // pegando o estado se está carregando ou não
   const { isFallback } = useRouter()
@@ -70,10 +71,10 @@ export default function Product({ product }: ProductProps) {
 
           <p>{product.description}</p>
           <button
-            disabled={isCreatingCheckoutSession}
-            onClick={handleBuyProduct}
+          // disabled={isCreatingCheckoutSession}
+          // onClick={handleBuyProduct}
           >
-            Comprar agora
+            Colocar na sacola
           </button>
         </ProductDetails>
       </ProductContainer>

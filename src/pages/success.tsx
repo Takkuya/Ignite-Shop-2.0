@@ -59,6 +59,7 @@ export default function Success({ customerName, product }: SuccessProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  //   console.log('query', query)
   // caso não tenha o sessionId
   // o next permite que a gente faça um redirecionamento do usuário dentro da getServerSideProps
   // faço a verificação do session_id vindo do query pois lá em baixo transformamos ele em String
@@ -89,12 +90,14 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     // e quero expandir o produ ct
     expand: ['line_items', 'line_items.data.price.product'],
   })
+
+  console.log('----------------------', session)
   // podemos dar um console.log(session) para conseguirmos ver todas as informações
 
   // o ? serve para dizer que os objetos sempre vão possuir algum valor
   const customerName = session.customer_details?.name
   // pegando apenas o primeiro produto, pois por enquanto só temos 1 produto no checkout
-  // Stripe.Product pois expandimos ele, então especissszficamos que já expandimos essa propriedade
+  // Stripe.Product pois expandimos ele, então especificamos que já expandimos essa propriedade
   const product = session.line_items?.data[0].price?.product as Stripe.Product
 
   return {

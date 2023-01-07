@@ -1,17 +1,21 @@
 import Image from 'next/image'
-import camiseta from '../../assets/camisetas/1.png'
+import { CartItems } from '../../contexts/CartContext'
 import { ImageContainer, ShirtCardContainer, TextWrapper } from './styles'
 
-export const ShirtCard = () => {
+type ShirtCardProps = {
+  product: CartItems
+}
+
+export const ShirtCard = ({ product }: ShirtCardProps) => {
   return (
     <ShirtCardContainer>
       <ImageContainer>
-        <Image width={120} height={90} src={camiseta} alt="" />
+        <Image width={120} height={90} src={product.imageUrl} alt="" />
       </ImageContainer>
       <TextWrapper>
         <div>
-          <span>Camiseta Beyond the Limits</span>
-          <strong>R$ 79,90</strong>
+          <span>{product.name}</span>
+          <strong>{product.price}</strong>
         </div>
         <button>Remover</button>
       </TextWrapper>
