@@ -26,6 +26,7 @@ type CartContextValues = {
   cartItemsWithoutId: CartItemsWithoutId[]
   productId: ProductId[]
   addItemsToCart: (product: CartItems) => void
+  removeItemFromCart: (productId: string) => void
 }
 
 export const CartContext = createContext({} as CartContextValues)
@@ -34,7 +35,27 @@ export const CartContextProvider = ({ children }: CartContextProviderProps) => {
   const [cartItems, setCartItems] = useState<CartItems[]>([])
 
   function addItemsToCart(product: CartItems) {
-    setCartItems([...cartItems, product])
+    const isItemInCart = cartItems.findIndex((item) => {
+      return item.id === product.id
+    })
+
+    if (isItemInCart) {
+      setCartItems((state) => [...state, product])
+    } else {
+      alert('Você já adicionou esse item ao carrinho')
+      setCartItems((state) => [...state])
+    }
+  }
+
+  function removeItemFromCart(productId: string) {
+    const cartItemsWithoutDeletedOne = cartItems.filter((cartItem) => {
+      return cartItem.id !== productId
+    })
+
+    setCartItems(cartItemsWithoutDeletedOne)
+
+    console.log('eita, id do produto bicho', productId)
+    console.log('removendo item')
   }
 
   const cartItemsWithoutId = cartItems.map((cartItem: CartItems) => {
@@ -57,6 +78,7 @@ export const CartContextProvider = ({ children }: CartContextProviderProps) => {
         cartItemsWithoutId,
         productId,
         addItemsToCart,
+        removeItemFromCart,
       }}
     >
       {children}

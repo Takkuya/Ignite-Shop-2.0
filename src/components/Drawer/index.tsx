@@ -8,6 +8,7 @@ import {
   Body,
   CartButton,
   DrawerWrapper,
+  EmptyCardWrapper,
   Footer,
   Header,
   Price,
@@ -79,9 +80,19 @@ export const CustomDrawer = ({
           <Body>
             <h3>Sacola de compras</h3>
             <div>
-              {cartItems.map((item) => {
-                return <ShirtCard product={item} key={item.id} />
-              })}
+              {cartItemsLength !== 0 ? (
+                cartItems.map((item) => {
+                  return <ShirtCard product={item} key={item.id} />
+                })
+              ) : (
+                <EmptyCardWrapper>
+                  <h1>OOPS</h1>
+                  <span>
+                    Parece que você não adicionou nada ao seu carrinho
+                  </span>
+                  <button onClick={handleDrawer}>Ver produtos</button>
+                </EmptyCardWrapper>
+              )}
             </div>
           </Body>
           <Footer>
@@ -95,7 +106,9 @@ export const CustomDrawer = ({
                 <Price>{cartItemsTotalPriceFormatted}</Price>
               </div>
             </ProductsInformationWrapper>
-            <button onClick={handleBuyProduct}>Finalizar compra</button>
+            <button onClick={handleBuyProduct} disabled={cartItemsLength === 0}>
+              Finalizar compra
+            </button>
           </Footer>
         </DrawerWrapper>
       </Drawer>

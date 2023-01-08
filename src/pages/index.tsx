@@ -16,7 +16,6 @@ import Head from 'next/head'
 import { Handbag } from 'phosphor-react'
 import { useContext } from 'react'
 import { CartContext } from '../contexts/CartContext'
-import { useRouter } from 'next/router'
 
 type HomeProps = {
   products: {
@@ -70,12 +69,6 @@ export default function Home({ products }: HomeProps) {
 
   function handleAddItemToCart(product: CartItems) {
     addItemsToCart(product)
-  }
-
-  const { isFallback } = useRouter()
-
-  if (isFallback) {
-    return <p>Is Loading...</p>
   }
 
   return (

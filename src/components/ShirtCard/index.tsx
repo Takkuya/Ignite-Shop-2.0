@@ -1,5 +1,6 @@
 import Image from 'next/image'
-import { CartItems } from '../../contexts/CartContext'
+import { useContext } from 'react'
+import { CartContext, CartItems } from '../../contexts/CartContext'
 import { ImageContainer, ShirtCardContainer, TextWrapper } from './styles'
 
 type ShirtCardProps = {
@@ -7,6 +8,12 @@ type ShirtCardProps = {
 }
 
 export const ShirtCard = ({ product }: ShirtCardProps) => {
+  const { removeItemFromCart } = useContext(CartContext)
+
+  function handleRemoveItemFromCart() {
+    removeItemFromCart(product.id)
+  }
+
   return (
     <ShirtCardContainer>
       <ImageContainer>
@@ -17,7 +24,7 @@ export const ShirtCard = ({ product }: ShirtCardProps) => {
           <span>{product.name}</span>
           <strong>{product.price}</strong>
         </div>
-        <button>Remover</button>
+        <button onClick={handleRemoveItemFromCart}>Remover</button>
       </TextWrapper>
     </ShirtCardContainer>
   )

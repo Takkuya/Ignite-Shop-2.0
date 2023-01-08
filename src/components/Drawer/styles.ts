@@ -82,6 +82,38 @@ export const Body = styled('div', {
   },
 })
 
+export const EmptyCardWrapper = styled('div', {
+  marginTop: '2rem',
+
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: '0.5rem',
+
+  textAlign: 'center',
+
+  span: {
+    marginTop: '0.25rem',
+    color: '$gray300',
+  },
+
+  button: {
+    borderRadius: 8,
+    background: '$green500',
+    fontSize: '1rem',
+    color: '$white',
+
+    padding: '0.75rem',
+
+    cursor: 'pointer',
+
+    '&:hover': {
+      transition: '0.2s all',
+      background: '$green300',
+    },
+  },
+})
+
 export const Footer = styled('footer', {
   position: 'fixed',
   bottom: 0,
@@ -108,9 +140,14 @@ export const Footer = styled('footer', {
 
     cursor: 'pointer',
 
-    '&:hover': {
+    '&:not(:disabled):hover': {
       transition: '0.2s all',
       background: '$green300',
+    },
+
+    '&:disabled': {
+      opacity: 0.6,
+      cursor: 'not-allowed',
     },
   },
 })
