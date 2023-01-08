@@ -38,14 +38,21 @@ export const SuccessContainer = styled('main', {
   },
 })
 
+export const ImageWrapper = styled('div', {
+  display: 'flex',
+})
+
 export const ImageContainer = styled('div', {
   width: '100%',
   maxWidth: 130,
-  height: 145,
+  height: 130,
   background: 'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)',
-  borderRadius: 8,
+  borderRadius: 65,
   padding: '0.25rem',
   marginTop: '4rem',
+  marginRight: '-2rem',
+
+  filter: 'drop-shadow(-30px 0px 4px #00000020)',
 
   display: 'flex',
   alignItems: 'center',

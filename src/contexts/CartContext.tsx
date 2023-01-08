@@ -53,9 +53,6 @@ export const CartContextProvider = ({ children }: CartContextProviderProps) => {
     })
 
     setCartItems(cartItemsWithoutDeletedOne)
-
-    console.log('eita, id do produto bicho', productId)
-    console.log('removendo item')
   }
 
   const cartItemsWithoutId = cartItems.map((cartItem: CartItems) => {
