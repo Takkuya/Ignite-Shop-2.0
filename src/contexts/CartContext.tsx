@@ -4,16 +4,12 @@ type CartContextProviderProps = {
   children: React.ReactNode
 }
 
-type CartItemsWithoutId = {
-  price: string
-  quantity: number
-}
-
 type ProductId = {
   id: string
 }
 
-export type CartItems = ProductId & {
+export type ProductType = ProductId & {
+  id: string
   imageUrl: string
   name: string
   price: string
@@ -22,19 +18,17 @@ export type CartItems = ProductId & {
 }
 
 type CartContextValues = {
-  cartItems: CartItems[]
-  cartItemsWithoutId: CartItemsWithoutId[]
-  productId: ProductId[]
-  addItemsToCart: (product: CartItems) => void
+  cartItems: ProductType[]
+  addItemsToCart: (product: ProductType) => void
   removeItemFromCart: (productId: string) => void
 }
 
 export const CartContext = createContext({} as CartContextValues)
 
 export const CartContextProvider = ({ children }: CartContextProviderProps) => {
-  const [cartItems, setCartItems] = useState<CartItems[]>([])
+  const [cartItems, setCartItems] = useState<ProductType[]>([])
 
-  function addItemsToCart(product: CartItems) {
+  function addItemsToCart(product: ProductType) {
     const isItemInCart = cartItems.findIndex((item) => {
       return item.id === product.id
     })
@@ -55,25 +49,10 @@ export const CartContextProvider = ({ children }: CartContextProviderProps) => {
     setCartItems(cartItemsWithoutDeletedOne)
   }
 
-  const cartItemsWithoutId = cartItems.map((cartItem: CartItems) => {
-    return {
-      price: cartItem.priceId,
-      quantity: 1,
-    }
-  })
-
-  const productId = cartItems.map((cartItem: CartItems) => {
-    return {
-      id: cartItem.id,
-    }
-  })
-
   return (
     <CartContext.Provider
       value={{
         cartItems,
-        cartItemsWithoutId,
-        productId,
         addItemsToCart,
         removeItemFromCart,
       }}

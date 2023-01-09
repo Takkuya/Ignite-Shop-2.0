@@ -2,6 +2,7 @@ import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
+import Stripe from 'stripe'
 import { stripe } from '../lib/stripe'
 import {
   ImageContainer,
@@ -28,12 +29,13 @@ Por isso vamos fazer o fetch usando o getServerSideProps
 
 type SuccessProps = {
   customerName: string
-  product: {
-    images: string[]
-  }[]
+  productsImages: string[]
 }
 
-export default function Success({ customerName, product }: SuccessProps) {
+export default function Success({
+  customerName,
+  productsImages,
+}: SuccessProps) {
   return (
     <>
       <Head>
@@ -46,23 +48,18 @@ export default function Success({ customerName, product }: SuccessProps) {
         <h1>Compra efetuada!</h1>
 
         <ImageWrapper>
-          {product.map((singleProduct) => {
+          {productsImages.map((image, index) => {
             return (
-              <ImageContainer key={singleProduct.images[0]}>
-                <Image
-                  src={singleProduct.images[0]}
-                  width={120}
-                  height={120}
-                  alt=""
-                />
+              <ImageContainer key={index}>
+                <Image src={image} width={120} height={120} alt="" />
               </ImageContainer>
             )
           })}
         </ImageWrapper>
 
         <p>
-          Uhuul <strong>{customerName}</strong>, sua compra de {product.length}{' '}
-          camisetas já está a caminho da sua casa.
+          Uhuul <strong>{customerName}</strong>, sua compra de{' '}
+          {productsImages.length} camisetas já está a caminho da sua casa.
         </p>
 
         <Link href="/">Voltar ao catálogo</Link>
@@ -103,8 +100,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     expand: ['line_items', 'line_items.data.price.product'],
   })
 
-  console.log('produtos server aaaaaaaaaaaaaaaaaa', session.line_items?.data)
-
   // podemos dar um console.log(session) para conseguirmos ver todas as informações
 
   // o ? serve para dizer que os objetos sempre vão possuir algum valor
@@ -112,16 +107,15 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   // pegando apenas o primeiro produto, pois por enquanto só temos 1 produto no checkout
   // Stripe.Product pois expandimos ele, então especificamos que já expandimos essa propriedade
 
-  const productArr = session.line_items?.data.map((uniqueProduct) => {
-    return uniqueProduct.price?.product
+  const productsImages = session.line_items?.data.map((item) => {
+    const product = item.price?.product as Stripe.Product
+    return product.images[0]
   })
-
-  console.log('console.log no node', productArr)
 
   return {
     props: {
       customerName,
-      product: productArr,
+      productsImages,
     },
   }
 }

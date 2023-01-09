@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 import Stripe from 'stripe'
-import { CartContext } from '../../contexts/CartContext'
+import { CartContext, ProductType } from '../../contexts/CartContext'
 import { stripe } from '../../lib/stripe'
 import {
   ImageContainer,
@@ -26,19 +26,10 @@ type ProductProps = {
   }
 }
 
-type CartItems = {
-  id: string
-  imageUrl: string
-  name: string
-  price: string
-  priceId: string
-  priceWithoutFormatting: number
-}
-
 export default function Product({ product }: ProductProps) {
   const { addItemsToCart } = useContext(CartContext)
 
-  function handleAddItemToCart(product: CartItems) {
+  function handleAddItemToCart(product: ProductType) {
     addItemsToCart(product)
   }
 

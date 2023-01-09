@@ -1,9 +1,177 @@
 import { styled } from '../../styles'
+import * as Dialog from '@radix-ui/react-dialog'
 
-export const DrawerWrapper = styled('div', {
-  background: '$gray900',
-  height: '100vh',
-  padding: '1.5rem 3rem 3rem 3rem',
+export const CartContent = styled(Dialog.Content, {
+  position: 'fixed',
+  // encostado no topo, direita e embaixo
+  top: 0,
+  right: 0,
+  bottom: 0,
+
+  width: '30rem',
+  background: '$gray800',
+  padding: '3rem',
+  paddingTop: '4.5rem',
+
+  boxShadow: '-4px 0px 30px rgba(0, 0, 0, 0.8)',
+  display: 'flex',
+  flexDirection: 'column',
+
+  h2: {
+    fontWeight: 700,
+    fontSize: '$lg',
+    color: '$gray100',
+
+    marginBottom: '2rem',
+  },
+
+  '> section': {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1.5rem',
+    flex: 1,
+
+    overflowY: 'auto',
+  },
+})
+
+export const CartClose = styled(Dialog.Close, {
+  background: 'none',
+  border: 'none',
+  color: '$gray500',
+  position: 'absolute',
+
+  top: '1.75rem',
+  right: '1.75rem',
+})
+
+export const EmptyCartWrapper = styled('div', {
+  marginTop: '2rem',
+
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: '0.5rem',
+
+  textAlign: 'center',
+
+  span: {
+    marginTop: '0.25rem',
+    color: '$gray300',
+  },
+})
+
+export const CartProduct = styled('div', {
+  width: '100%',
+  display: 'flex',
+  gap: '1.25rem',
+  alignItems: 'center',
+  height: '5.8125rem',
+})
+
+export const CartProductImage = styled('div', {
+  height: '5.8125rem',
+  width: '6.3125rem',
+  background: 'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)',
+
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  borderRadius: 8,
+
+  img: {
+    objectFit: 'cover',
+  },
+})
+
+export const CartProductDetails = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
+
+  p: {
+    color: '$gray300',
+    fontSize: '$md',
+  },
+
+  strong: {
+    marginTop: 4,
+    fontSize: '$md',
+    fontWeight: 700,
+  },
+
+  button: {
+    // colar embaixo da sidebar
+    marginTop: 'auto',
+    width: 'max-content',
+    background: 'none',
+    color: '$green500',
+    fontSize: '1rem',
+    fontWeight: 700,
+
+    border: 'none',
+  },
+})
+
+export const CartFinalization = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+
+  // os auto só funciona com display flex
+  marginTop: 'auto',
+
+  button: {
+    width: '100%',
+    background: '$green500',
+    color: '$white',
+    fontSize: '$md',
+    height: '4.3125rem',
+
+    border: 'none',
+    borderRadius: 8,
+    fontWeight: 700,
+
+    '&:not(:disabled):hover': {
+      background: '$green300',
+    },
+
+    '&:disabled': {
+      opacity: 0.6,
+      cursor: 'not-allowed',
+    },
+  },
+})
+
+export const FinalizationDetails = styled('section', {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 8,
+  marginBottom: 55,
+
+  div: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+
+    p: {
+      fontSize: '$md',
+      color: '$gray300',
+    },
+
+    '&:last-child': {
+      fontWeight: 'bold',
+
+      span: {
+        fontSize: '$md',
+      },
+
+      p: {
+        color: '$gray100',
+        fontSize: '$xl',
+      },
+    },
+  },
 })
 
 export const CartButton = styled('button', {
@@ -48,133 +216,4 @@ export const CartButton = styled('button', {
     alignItems: 'center',
     justifyContent: 'center',
   },
-})
-
-export const Header = styled('header', {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'flex-end',
-
-  button: {
-    background: 'transparent',
-    border: 0,
-    fontSize: 0,
-
-    cursor: 'pointer',
-
-    svg: {
-      color: '$gray300',
-    },
-  },
-})
-
-export const Body = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '2rem',
-
-  marginTop: '1.5rem',
-
-  '> div': {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1.5rem',
-  },
-})
-
-export const EmptyCardWrapper = styled('div', {
-  marginTop: '2rem',
-
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  gap: '0.5rem',
-
-  textAlign: 'center',
-
-  span: {
-    marginTop: '0.25rem',
-    color: '$gray300',
-  },
-
-  button: {
-    borderRadius: 8,
-    background: '$green500',
-    fontSize: '1rem',
-    color: '$white',
-
-    padding: '0.75rem',
-
-    cursor: 'pointer',
-
-    '&:hover': {
-      transition: '0.2s all',
-      background: '$green300',
-    },
-  },
-})
-
-export const Footer = styled('footer', {
-  position: 'fixed',
-  bottom: 0,
-  width: '100%',
-  marginTop: 'auto',
-
-  marginBottom: '3rem',
-
-  button: {
-    marginTop: '3.5rem',
-
-    background: '$green500',
-    color: '$white',
-    fontWeight: 'bold',
-    fontSize: '$lg',
-
-    border: 0,
-    borderRadius: 8,
-
-    padding: '1.25rem',
-
-    width: '100%',
-    maxWidth: 384,
-
-    cursor: 'pointer',
-
-    '&:not(:disabled):hover': {
-      transition: '0.2s all',
-      background: '$green300',
-    },
-
-    '&:disabled': {
-      opacity: 0.6,
-      cursor: 'not-allowed',
-    },
-  },
-})
-
-export const ProductsInformationWrapper = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '0.5rem',
-
-  div: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-
-    maxWidth: 384,
-
-    '>strong': {
-      fontSize: '$md',
-      color: '$gray100',
-    },
-  },
-
-  span: {
-    color: '$gray300',
-  },
-})
-
-export const Price = styled('strong', {
-  fontSize: '$xl',
 })

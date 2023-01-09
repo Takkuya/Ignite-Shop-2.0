@@ -1,37 +1,30 @@
+import * as Dialog from '@radix-ui/react-dialog'
 import axios from 'axios'
 import { Handbag, X } from 'phosphor-react'
-import { useContext } from 'react'
-import Drawer from 'react-modern-drawer'
+import { useContext, useState } from 'react'
 import { CartContext } from '../../contexts/CartContext'
 import { ShirtCard } from '../ShirtCard'
 import {
-  Body,
   CartButton,
-  DrawerWrapper,
-  EmptyCardWrapper,
-  Footer,
-  Header,
-  Price,
-  ProductsInformationWrapper,
+  CartClose,
+  CartContent,
+  CartFinalization,
+  CartProduct,
+  EmptyCartWrapper,
+  FinalizationDetails,
 } from './styles'
 
-type CustomDrawerProps = {
-  isDrawerOpen: boolean
-  handleDrawer: () => void
-}
-
-export const CustomDrawer = ({
-  isDrawerOpen,
-  handleDrawer,
-}: CustomDrawerProps) => {
-  const { cartItemsWithoutId, productId, cartItems } = useContext(CartContext)
+export const CustomDrawer = () => {
+  const { cartItems } = useContext(CartContext)
+  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
+    useState(false)
 
   async function handleBuyProduct() {
     try {
+      setIsCreatingCheckoutSession(true)
       // conectando com a API do next (api/checkout.ts)
       const response = await axios.post('/api/checkout', {
-        lineItems: cartItemsWithoutId,
-        productId,
+        products: cartItems,
       })
 
       const { checkoutUrl } = response.data
@@ -42,11 +35,12 @@ export const CustomDrawer = ({
     } catch (err) {
       // o melhor seria conectar a alguma ferramenta de observabilidade (datadog/sentry)
       // para conseguirmos obter as informações dos erros
+      setIsCreatingCheckoutSession(false)
       alert('Falha ao redirecionar ao checkout')
     }
   }
 
-  const cartItemsLength = cartItemsWithoutId.length
+  const cartItemsLength = cartItems.length
 
   const cartItemsTotalPrice = cartItems.reduce(
     (acc, currentValue) => {
@@ -65,59 +59,60 @@ export const CustomDrawer = ({
 
   return (
     <>
-      <Drawer
-        size={'30rem'}
-        open={isDrawerOpen}
-        onClose={handleDrawer}
-        direction="right"
-      >
-        <DrawerWrapper>
-          <Header>
-            <button onClick={handleDrawer}>
+      <Dialog.Root>
+        {/* asChild => o que estpa dentro que vai ser o botão de trigger */}
+        <Dialog.Trigger asChild>
+          {cartItemsLength !== 0 ? (
+            <CartButton>
+              <span>{cartItemsLength}</span>
+              <Handbag size={24} weight="bold" />
+            </CartButton>
+          ) : null}
+        </Dialog.Trigger>
+        <Dialog.Portal>
+          <CartContent>
+            <CartClose>
               <X size={24} weight="bold" />
-            </button>
-          </Header>
-          <Body>
-            <h3>Sacola de compras</h3>
-            <div>
-              {cartItemsLength !== 0 ? (
-                cartItems.map((item) => {
-                  return <ShirtCard product={item} key={item.id} />
-                })
-              ) : (
-                <EmptyCardWrapper>
+            </CartClose>
+            <h2>Sacola de compras</h2>
+            <section>
+              {cartItemsLength <= 0 && (
+                <EmptyCartWrapper>
                   <h1>OOPS</h1>
                   <span>
                     Parece que você não adicionou nada ao seu carrinho
                   </span>
-                  <button onClick={handleDrawer}>Ver produtos</button>
-                </EmptyCardWrapper>
+                </EmptyCartWrapper>
               )}
-            </div>
-          </Body>
-          <Footer>
-            <ProductsInformationWrapper>
-              <div>
-                <span>Quantidade</span>
-                <span>{cartItemsLength} itens</span>
-              </div>
-              <div>
-                <strong>Valor total</strong>
-                <Price>{cartItemsTotalPriceFormatted}</Price>
-              </div>
-            </ProductsInformationWrapper>
-            <button onClick={handleBuyProduct} disabled={cartItemsLength === 0}>
-              Finalizar compra
-            </button>
-          </Footer>
-        </DrawerWrapper>
-      </Drawer>
-      {cartItemsLength !== 0 ? (
-        <CartButton onClick={handleDrawer}>
-          <span>{cartItemsLength}</span>
-          <Handbag size={24} weight="bold" />
-        </CartButton>
-      ) : null}
+              {cartItems.map((cartItem) => (
+                <CartProduct key={cartItem.id}>
+                  <ShirtCard product={cartItem} />
+                </CartProduct>
+              ))}
+            </section>
+            <CartFinalization>
+              <FinalizationDetails>
+                <div>
+                  <span>Quantidade</span>
+                  <p>
+                    {cartItemsLength} {cartItemsLength === 1 ? 'item' : 'itens'}
+                  </p>
+                </div>
+                <div>
+                  <span>Valor total</span>
+                  <p>{cartItemsTotalPriceFormatted}</p>
+                </div>
+              </FinalizationDetails>
+              <button
+                onClick={handleBuyProduct}
+                disabled={isCreatingCheckoutSession || cartItemsLength <= 0}
+              >
+                Finalizar compra
+              </button>
+            </CartFinalization>
+          </CartContent>
+        </Dialog.Portal>
+      </Dialog.Root>
     </>
   )
 }

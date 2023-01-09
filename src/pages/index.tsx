@@ -15,26 +15,10 @@ import Link from 'next/link'
 import Head from 'next/head'
 import { Handbag } from 'phosphor-react'
 import { useContext } from 'react'
-import { CartContext } from '../contexts/CartContext'
+import { CartContext, ProductType } from '../contexts/CartContext'
 
 type HomeProps = {
-  products: {
-    id: string
-    priceId: string
-    name: string
-    imageUrl: string
-    price: string
-    priceWithoutFormatting: number
-  }[]
-}
-
-type CartItems = {
-  id: string
-  imageUrl: string
-  name: string
-  price: string
-  priceId: string
-  priceWithoutFormatting: number
+  products: ProductType[]
 }
 
 export default function Home({ products }: HomeProps) {
@@ -66,7 +50,7 @@ export default function Home({ products }: HomeProps) {
     },
   })
 
-  function handleAddItemToCart(product: CartItems) {
+  function handleAddItemToCart(product: ProductType) {
     addItemsToCart(product)
   }
 

@@ -1,10 +1,10 @@
 import Image from 'next/image'
 import { useContext } from 'react'
-import { CartContext, CartItems } from '../../contexts/CartContext'
+import { CartContext, ProductType } from '../../contexts/CartContext'
 import { ImageContainer, ShirtCardContainer, TextWrapper } from './styles'
 
 type ShirtCardProps = {
-  product: CartItems
+  product: ProductType
 }
 
 export const ShirtCard = ({ product }: ShirtCardProps) => {

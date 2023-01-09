@@ -40,6 +40,10 @@ export const SuccessContainer = styled('main', {
 
 export const ImageWrapper = styled('div', {
   display: 'flex',
+
+  'div + div': {
+    marginLeft: 'calc(-100px / 2)',
+  },
 })
 
 export const ImageContainer = styled('div', {
@@ -49,7 +53,6 @@ export const ImageContainer = styled('div', {
   borderRadius: 65,
   padding: '0.25rem',
   marginTop: '4rem',
-  marginRight: '-2rem',
 
   filter: 'drop-shadow(-30px 0px 4px #00000020)',
 

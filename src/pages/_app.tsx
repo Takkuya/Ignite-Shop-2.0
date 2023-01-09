@@ -4,7 +4,6 @@ import logoImg from '../assets/Logo.svg'
 import { Container, Header } from '../styles/pages/app'
 import Link from 'next/link'
 import 'react-modern-drawer/dist/index.css'
-import { useState } from 'react'
 import { CustomDrawer } from '../components/Drawer'
 import { CartContextProvider } from '../contexts/CartContext'
 import Head from 'next/head'
@@ -13,12 +12,6 @@ import Head from 'next/head'
 globalStyles()
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-
-  function handleDrawer() {
-    setIsDrawerOpen((state) => !state)
-  }
-
   return (
     <Container>
       <Head>
@@ -29,10 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Link href="/">
             <img src={logoImg.src} alt="" />
           </Link>
-          <CustomDrawer
-            isDrawerOpen={isDrawerOpen}
-            handleDrawer={handleDrawer}
-          />
+          <CustomDrawer />
         </Header>
 
         <Component {...pageProps} />
