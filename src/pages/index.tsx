@@ -28,7 +28,7 @@ type HomeProps = {
   }[]
 }
 
-export type CartItems = {
+type CartItems = {
   id: string
   imageUrl: string
   name: string
@@ -44,7 +44,6 @@ export default function Home({ products }: HomeProps) {
   // assim como se fosse um document.getElementById eu tenho a referência
   // para um elemento da DOM
   const [sliderRef] = useKeenSlider({
-    loop: true,
     breakpoints: {
       '(min-width: 576px)': {
         slides: {

@@ -4,8 +4,9 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import Stripe from 'stripe'
+import { CartContext } from '../../contexts/CartContext'
 import { stripe } from '../../lib/stripe'
 import {
   ImageContainer,
@@ -16,38 +17,30 @@ import {
 type ProductProps = {
   product: {
     id: string
+    priceId: string
     name: string
     imageUrl: string
     price: string
+    priceWithoutFormatting: number
     description: string
-    defaultPriceId: string
   }
 }
 
+type CartItems = {
+  id: string
+  imageUrl: string
+  name: string
+  price: string
+  priceId: string
+  priceWithoutFormatting: number
+}
+
 export default function Product({ product }: ProductProps) {
-  //   const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
-  //     useState(false)
+  const { addItemsToCart } = useContext(CartContext)
 
-  //   async function handleBuyProduct() {
-  //     try {
-  //       setIsCreatingCheckoutSession(true)
-  //       // conectando com a API do next (api/checkout.ts)
-  //       const response = await axios.post('/api/checkout', {
-  //         priceId: product.defaultPriceId,
-  //       })
-
-  //       const { checkoutUrl } = response.data
-
-  //       // redirecionando para uma aplicação externa (nesse caso o Stripe)
-  //       // não coloco o setIsCreatingCheckoutSession para false pois estamos redirecionando o usuário no final da execução
-  //       window.location.href = checkoutUrl
-  //     } catch (err) {
-  //       setIsCreatingCheckoutSession(false)
-  //       // o melhor seria conectar a alguma ferramenta de observabilidade (datadog/sentry)
-  //       // para conseguirmos obter as informações dos erros
-  //       alert('Falha ao redirecionar ao checkout')
-  //     }
-  //   }
+  function handleAddItemToCart(product: CartItems) {
+    addItemsToCart(product)
+  }
 
   // pegando o estado se está carregando ou não
   const { isFallback } = useRouter()
@@ -70,10 +63,7 @@ export default function Product({ product }: ProductProps) {
           <span>{product.price}</span>
 
           <p>{product.description}</p>
-          <button
-          // disabled={isCreatingCheckoutSession}
-          // onClick={handleBuyProduct}
-          >
+          <button onClick={() => handleAddItemToCart(product)}>
             Colocar na sacola
           </button>
         </ProductDetails>
