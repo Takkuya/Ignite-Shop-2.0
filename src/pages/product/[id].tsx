@@ -122,7 +122,7 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({
         }).format(price.unit_amount! / 100),
         description: product.description,
         // default price => preço padrão do produto, mesmo que tenha mais de 1 produto, preço comum do produto
-        defaultPriceId: price.id,
+        priceId: price.id,
         priceWithoutFormatting: Number(price.unit_amount_decimal),
       },
     },

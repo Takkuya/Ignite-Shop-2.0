@@ -23,6 +23,7 @@ export const CustomDrawer = () => {
     try {
       setIsCreatingCheckoutSession(true)
       // conectando com a API do next (api/checkout.ts)
+
       const response = await axios.post('/api/checkout', {
         products: cartItems,
       })
@@ -51,8 +52,6 @@ export const CustomDrawer = () => {
     },
     { priceWithoutFormatting: 0 },
   )
-
-  console.log(cartItemsTotalPrice)
 
   const cartItemsTotalPriceFormatted = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
