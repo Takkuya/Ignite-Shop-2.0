@@ -52,6 +52,8 @@ export const CustomDrawer = () => {
     { priceWithoutFormatting: 0 },
   )
 
+  console.log(cartItemsTotalPrice)
+
   const cartItemsTotalPriceFormatted = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',

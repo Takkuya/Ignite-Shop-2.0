@@ -123,6 +123,7 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({
         description: product.description,
         // default price => preço padrão do produto, mesmo que tenha mais de 1 produto, preço comum do produto
         defaultPriceId: price.id,
+        priceWithoutFormatting: Number(price.unit_amount_decimal),
       },
     },
     revalidate: 60 * 60 * 1, // 1 hora
