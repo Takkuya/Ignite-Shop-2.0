@@ -7,6 +7,7 @@ import 'react-modern-drawer/dist/index.css'
 import { useState } from 'react'
 import { CustomDrawer } from '../components/Drawer'
 import { CartContextProvider } from '../contexts/CartContext'
+import Head from 'next/head'
 
 // aplicando estilos globais
 globalStyles()
@@ -20,6 +21,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <Container>
+      <Head>
+        <link rel="shortcut icon" href="/favicon.ico" />
+      </Head>
       <CartContextProvider>
         <Header>
           <Link href="/">

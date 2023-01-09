@@ -52,7 +52,7 @@ export default function Success({ customerName, product }: SuccessProps) {
                 <Image
                   src={singleProduct.images[0]}
                   width={120}
-                  height={110}
+                  height={120}
                   alt=""
                 />
               </ImageContainer>
