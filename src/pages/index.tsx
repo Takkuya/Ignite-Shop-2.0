@@ -22,7 +22,7 @@ type HomeProps = {
 }
 
 export default function Home({ products }: HomeProps) {
-  const { addItemsToCart } = useContext(CartContext)
+  const { addItemsToCart, itemAlreadExistsInCart } = useContext(CartContext)
 
   // refs => serve para termos a referência de um elemento na DOM
   // assim como se fosse um document.getElementById eu tenho a referência
@@ -74,7 +74,10 @@ export default function Home({ products }: HomeProps) {
                   <span>{product.price}</span>
                 </TextContainer>
 
-                <AddToCartButton onClick={() => handleAddItemToCart(product)}>
+                <AddToCartButton
+                  disabled={itemAlreadExistsInCart(product.id)}
+                  onClick={() => handleAddItemToCart(product)}
+                >
                   <Handbag size={32} weight="bold" />
                 </AddToCartButton>
               </footer>

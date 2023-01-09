@@ -101,8 +101,13 @@ export const AddToCartButton = styled('button', {
     color: '$white',
   },
 
-  '&:hover': {
+  '&:not(:disabled):hover': {
     transition: '0.2s all',
     background: '$green300',
+  },
+
+  '&:disabled': {
+    opacity: 0.6,
+    cursor: 'not-allowed',
   },
 })

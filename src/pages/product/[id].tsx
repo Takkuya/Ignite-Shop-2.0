@@ -27,7 +27,7 @@ type ProductProps = {
 }
 
 export default function Product({ product }: ProductProps) {
-  const { addItemsToCart } = useContext(CartContext)
+  const { addItemsToCart, itemAlreadExistsInCart } = useContext(CartContext)
 
   function handleAddItemToCart(product: ProductType) {
     addItemsToCart(product)
@@ -39,6 +39,8 @@ export default function Product({ product }: ProductProps) {
   if (isFallback) {
     return <p>Is Loading...</p>
   }
+
+  const itemAlreadyExist = itemAlreadExistsInCart(product.id)
 
   return (
     <>
@@ -54,8 +56,13 @@ export default function Product({ product }: ProductProps) {
           <span>{product.price}</span>
 
           <p>{product.description}</p>
-          <button onClick={() => handleAddItemToCart(product)}>
-            Colocar na sacola
+          <button
+            disabled={itemAlreadyExist}
+            onClick={() => handleAddItemToCart(product)}
+          >
+            {itemAlreadyExist
+              ? 'O item já está na sacola'
+              : 'Colocar na sacola'}
           </button>
         </ProductDetails>
       </ProductContainer>
